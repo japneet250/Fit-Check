@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.challenge-container {
+    background-image: url("/magicpattern-mesh-gradient-1705180159371.png");
+    background-size: cover;
+    @apply collapse collapse-arrow bg-base-200 w-fit h-fit text-center md:p-5 rounded-xl
+}
+
+.content {
+  @apply text-slate-50 text-lg md:text-3xl leading-relaxed select-none;
+}
+
+ul {
+    list-style-type: circle;
+}
+
+.title {
+  @apply text-4xl md:text-8xl text-slate-50 select-none;
+}
