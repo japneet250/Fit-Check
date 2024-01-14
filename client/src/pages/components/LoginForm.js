@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const YourComponent = ({data, sendData}) => {
+const YourComponent = ({info, sendInfo}) => {
 // State for the user's input and whether they are currently logged in or not
   useEffect(() => {
     const signupbtn = document.getElementById("signupbtn");
@@ -43,13 +43,13 @@ const YourComponent = ({data, sendData}) => {
             <button type="button" id="signinbtn" onClick={signIn}>
               Sign in
             </button>
+            <button type='button' className='w-full' onClick={() => sendData()}>Submit</button>
           </div>
       </div>
       
     </div>
   );
 };
-
 
 async function sendData () {
   const name = document.getElementById("nameInput").value;
@@ -60,7 +60,7 @@ async function sendData () {
   formData.append('email', email);
   formData.append('password', password)
   try {
-    const response = await fetch("http://localhost:8080/api/home", {
+    const response = await fetch("http://localhost:5000/signup", {
         method: 'POST',
         body: formData,
     });
