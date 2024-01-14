@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 const YourComponent = ({info, sendInfo}) => {
+  const [login, setLogin] = useState(true);
 // State for the user's input and whether they are currently logged in or not
   useEffect(() => {
     const signupbtn = document.getElementById("signupbtn");
@@ -37,13 +38,13 @@ const YourComponent = ({info, sendInfo}) => {
             </p>
           </div>
           <div className="btn-field">
-            <button type="button" id="signupbtn" onClick={signUp}>
+            <button type="button" id="signupbtn" onClick={() => signUp(setLogin)}>
               Sign up
             </button>
-            <button type="button" id="signinbtn" onClick={signIn}>
+            <button type="button" id="signinbtn" onClick={() => signIn(setLogin)}>
               Sign in
             </button>
-            <button type='button' className='w-full' onClick={() => sendData()}>Submit</button>
+            <button type='button' className='w-full' onClick={() => sendData(login, setLogin)}>Submit</button>
           </div>
       </div>
       
@@ -51,27 +52,44 @@ const YourComponent = ({info, sendInfo}) => {
   );
 };
 
-async function sendData () {
-  const name = document.getElementById("nameInput").value;
+async function sendData (login, setLogin) {
+
+  let name = "";
+  if (!login) {
+    name = document.getElementById("nameInput").value;
+  }
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const formData = new FormData()
-  formData.append('name', name);
+
+  if (!login) {
+    formData.append('name', name);
+  }
+
   formData.append('email', email);
   formData.append('password', password)
+
+  let path = "";
+  if (!login) {
+    path = "http://localhost:5000/signup"
+  } else {
+    path = "http://localhost:5000/login" 
+  }
   try {
-    const response = await fetch("http://localhost:5000/signup", {
+    const response = await fetch(path, {
         method: 'POST',
         body: formData,
     });
     const responseData = await response.json();
     console.log(responseData)
+    setLogin(true)
   } catch (error) {
       console.log(error);
   }
 }
 
-function signUp () {
+function signUp (setLogin) {
   const signupbtn = document.getElementById("signupbtn");
   const signinbtn = document.getElementById("signinbtn");
   const nameField = document.getElementById("nameField");
@@ -80,9 +98,10 @@ function signUp () {
   title.innerHTML = "Sign Up";
   signupbtn.classList.remove("disabled");
   signinbtn.classList.add("disabled");
+  setLogin(false)
 };
 
-async function signIn() {
+async function signIn(setLogin) {
   const signupbtn = document.getElementById("signupbtn");
   const signinbtn = document.getElementById("signinbtn");
   const nameField = document.getElementById("nameField");
@@ -91,6 +110,7 @@ async function signIn() {
   title.innerHTML = "Sign In";
   signupbtn.classList.add("disabled");
   signinbtn.classList.remove("disabled");
+  setLogin(true)
 };
 
 
