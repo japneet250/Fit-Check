@@ -61,7 +61,12 @@ class Challenge(db.Model):
     day6_target = db.Column(db.Integer, nullable=True)
     day7_target = db.Column(db.Integer, nullable=True)
 
-
+class ActivityLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    activity_count = db.Column(db.Integer, nullable=False)
+    
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
