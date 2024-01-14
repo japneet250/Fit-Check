@@ -11,7 +11,7 @@ from datetime import datetime
 from flask import request, redirect, url_for, jsonify
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/sign-up": {"origins": "*"}})
+CORS(app, origins='http://localhost:3000')
 db = SQLAlchemy()
 DB_NAME = "database.db"
 app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
@@ -33,9 +33,18 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), unique=False, nullable=False)
-    activity_logs = db.relationship('ActivityLog', backref='user', lazy=True)
 
-
+class WeekLog(db.Model):
+     id = db.Column(db.Integer, primary_key=True)  
+     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+     d1 = db.Column(db.Integer)
+     d2 = db.Column(db.Integer)
+     d3 = db.Column(db.Integer)
+     d4 = db.Column(db.Integer)
+     d5 = db.Column(db.Integer)
+     d6 = db.Column(db.Integer)
+     d7 = db.Column(db.Integer)
+     
 class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -52,12 +61,7 @@ class Challenge(db.Model):
     day6_target = db.Column(db.Integer, nullable=True)
     day7_target = db.Column(db.Integer, nullable=True)
 
-class ActivityLog(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    activity_count = db.Column(db.Integer, nullable=False)
-    
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -68,7 +72,8 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user, remember=True)
-                return jsonify({'response': 'Logged in successfully'})
+                user_data = [{'id': user.id, 'username': user.username, 'email': user.email, 'd1': user.id.d1, 'd2':user.id.d2, 'd3':user.id.d3, 'd4':user.id.d4, 'd5':user.id.d5, 'd6':user.id.d6, 'd2':user.id.d2} for user in users]
+                return jsonify(user_data)
             else:
                 return jsonify({'response': 'Failed Login Attempt'})
         else:
@@ -84,7 +89,6 @@ def logout():
 
 
 @app.route('/signup', methods=['POST'])
-@cross_origin()
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -108,5 +112,11 @@ def sign_up():
             login_user(new_user, remember=True)
             return jsonify({"Response": 'User is Created'})
         
+@app.route('/fetch-user-data', methods=['POST'])
+def fetch_user_data():
+    users = User.query.all()
+    user_data = [{'id': user.id, 'username': user.username, 'email': user.email, 'd1': user.id.d1, 'd2':user.id.d2, 'd3':user.id.d3, 'd4':user.id.d4, 'd5':user.id.d5, 'd6':user.id.d6, 'd2':user.id.d2} for user in users]
+    return jsonify(user_data)
+
 if __name__ == '__main__':
     app.run(debug=True)
