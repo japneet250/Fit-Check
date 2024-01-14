@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import daisyui from 'daisyui';
 
 const YourComponent = ({info, sendInfo}) => {
   const [login, setLogin] = useState(true);
