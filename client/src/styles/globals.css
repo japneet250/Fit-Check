@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 .challenge-container {
     background-image: url("/magicpattern-mesh-gradient-1705180159371.png");
     background-size: cover;
