@@ -55,29 +55,33 @@ const YourComponent = ({info, sendInfo}) => {
 async function sendData (login, setLogin) {
 
   let name = "";
-  if (!login) {
-    name = document.getElementById("nameInput").value;
-  }
+  name = document.getElementById("nameInput").value;
+  
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const formData = new FormData()
 
-  if (!login) {
-    formData.append('name', name);
+  
+  formData.append('name', name);
+  
+
+  /*
+  {
+    "name": "John Doe",
+    "email": "john@doe.com",
+
   }
+  */
 
   formData.append('email', email);
   formData.append('password', password)
+  
+  const path = "http://localhost:5000/signup"
 
-  let path = "";
-  if (!login) {
-    path = "http://localhost:5000/signup"
-  } else {
-    path = "http://localhost:5000/login" 
-  }
   try {
-    const response = await fetch(path, {
+    console.log(path)
+    const response = await fetch("http://localhost:5000/signup", {
         method: 'POST',
         body: formData,
     });

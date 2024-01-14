@@ -58,7 +58,7 @@ class ActivityLog(db.Model):
     date = db.Column(db.Date, nullable=False)
     activity_count = db.Column(db.Integer, nullable=False)
     
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         emails = request.form.get('email')
