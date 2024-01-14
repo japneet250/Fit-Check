@@ -89,6 +89,7 @@ async function sendData (login, setLogin) {
     const responseData = await response.json();
     console.log(responseData)
     setLogin(true)
+    document.getElementById("my_modal_5")
   } catch (error) {
       console.log(error);
   }
