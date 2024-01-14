@@ -1,4 +1,3 @@
-from server import create_app
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin  # Add this line
@@ -42,6 +41,22 @@ class Challenge(db.Model):
     name = db.Column(db.String(50), nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)  # Duration in days
+    
+    
+    # Add daily targets for each day of the week
+    day1_target = db.Column(db.Integer, nullable=True)
+    day2_target = db.Column(db.Integer, nullable=True)
+    day3_target = db.Column(db.Integer, nullable=True)
+    day4_target = db.Column(db.Integer, nullable=True)
+    day5_target = db.Column(db.Integer, nullable=True)
+    day6_target = db.Column(db.Integer, nullable=True)
+    day7_target = db.Column(db.Integer, nullable=True)
+
+class ActivityLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    activity_count = db.Column(db.Integer, nullable=False)
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():
