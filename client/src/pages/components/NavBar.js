@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import YourComponent from "./LoginForm";
+import Link from "next/link";
 
 export default function NavBar ({data, sendData}) {
 
@@ -36,9 +37,9 @@ export default function NavBar ({data, sendData}) {
                                     <div className="modal-box">
                                         <h3 className="font-bold text-lg text-center">Log In</h3>
                                         <YourComponent />
-                                        
                                     </div>
                                 </dialog>
+                                <Link href="./profile">Click here</Link>
                             </>
                         ) : (
                             <h1>Hello World</h1>
