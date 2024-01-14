@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 
 const YourComponent = ({data, sendData}) => {
+// State for the user's input and whether they are currently logged in or not
+  useEffect(() => {
+    const signupbtn = document.getElementById("signupbtn");
+    const signinbtn = document.getElementById("signinbtn");
+    const nameField = document.getElementById("nameField");
+    const title = document.getElementById("title");
+    nameField.style.maxHeight = "0";
+    title.innerHTML = "Sign In";
+    signupbtn.classList.add("disabled");
+    signinbtn.classList.remove("disabled");
+  });
 
   return (
     <div>
@@ -27,22 +37,61 @@ const YourComponent = ({data, sendData}) => {
             </p>
           </div>
           <div className="btn-field">
-            <button type="button" id="signupbtn">
+            <button type="button" id="signupbtn" onClick={signUp}>
               Sign up
             </button>
-            <button type="button" id="signinbtn">
+            <button type="button" id="signinbtn" onClick={signIn}>
               Sign in
             </button>
           </div>
       </div>
+      
     </div>
   );
 };
+
 
 async function sendData () {
   const name = document.getElementById("nameInput").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
+  const formData = new FormData()
+  formData.append('name', name);
+  formData.append('email', email);
+  formData.append('password', password)
+  try {
+    const response = await fetch("http://localhost:8080/api/home", {
+        method: 'POST',
+        body: formData,
+    });
+    const responseData = await response.json();
+    console.log(responseData)
+  } catch (error) {
+      console.log(error);
+  }
 }
+
+function signUp () {
+  const signupbtn = document.getElementById("signupbtn");
+  const signinbtn = document.getElementById("signinbtn");
+  const nameField = document.getElementById("nameField");
+  const title = document.getElementById("title");
+  nameField.style.maxHeight = "60px";
+  title.innerHTML = "Sign Up";
+  signupbtn.classList.remove("disabled");
+  signinbtn.classList.add("disabled");
+};
+
+async function signIn() {
+  const signupbtn = document.getElementById("signupbtn");
+  const signinbtn = document.getElementById("signinbtn");
+  const nameField = document.getElementById("nameField");
+  const title = document.getElementById("title");
+  nameField.style.maxHeight = "0";
+  title.innerHTML = "Sign In";
+  signupbtn.classList.add("disabled");
+  signinbtn.classList.remove("disabled");
+};
+
+
 export default YourComponent;
